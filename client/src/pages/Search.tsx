@@ -13,6 +13,8 @@ export default function Search() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMedicine, setSelectedMedicine] = useState<any>(null);
   const [showAnalysis, setShowAnalysis] = useState(false);
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Search medicines
   const searchMutation = trpc.medicines.search.useMutation();
@@ -25,6 +27,30 @@ export default function Search() {
   // Save medicine
   const saveMutation = trpc.medicines.save.useMutation();
 
+  const handleSearchInputChange = async (value: string) => {
+    setSearchQuery(value);
+    if (value.length > 1) {
+      try {
+        const results = await searchMutation.mutateAsync({ query: value });
+        setSuggestions(results || []);
+        setShowSuggestions(true);
+      } catch (error) {
+        console.error("Autocomplete failed:", error);
+        setSuggestions([]);
+      }
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleSelectSuggestion = (medicine: any) => {
+    setSelectedMedicine(medicine);
+    setSearchQuery(medicine.name);
+    setShowSuggestions(false);
+    setShowAnalysis(true);
+  };
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
@@ -35,6 +61,7 @@ export default function Search() {
         setSelectedMedicine(results[0]);
         setShowAnalysis(true);
       }
+      setShowSuggestions(false);
     } catch (error) {
       console.error("Search failed:", error);
     }
@@ -98,10 +125,28 @@ export default function Search() {
                 type="text"
                 placeholder="Enter medicine name (e.g., Aspirin, Ibuprofen)..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => handleSearchInputChange(e.target.value)}
+                onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
                 className="w-full pl-10"
               />
               <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-lg shadow-lg z-50">
+                  {suggestions.slice(0, 5).map((suggestion, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => handleSelectSuggestion(suggestion)}
+                      className="w-full text-left px-4 py-2 hover:bg-accent/10 border-b border-border last:border-b-0 transition"
+                    >
+                      <p className="font-semibold text-foreground">{suggestion.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {suggestion.strength} • {suggestion.dosageForm}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             <Button
               type="submit"
@@ -233,9 +278,12 @@ export default function Search() {
             {/* Alternatives Section */}
             <Card className="p-6 border-accent/20">
               <h3 className="text-xl font-black mb-4">Generic & Lower-Cost Alternatives</h3>
-              <p className="text-muted-foreground">
-                Alternatives will be shown here once available in the database.
-              </p>
+              <Button
+                onClick={() => navigate(`/alternatives?medicineId=${selectedMedicine.id}`)}
+                className="bg-accent hover:bg-accent/90"
+              >
+                View Alternatives & Pricing
+              </Button>
             </Card>
 
             {/* Price Comparison */}
