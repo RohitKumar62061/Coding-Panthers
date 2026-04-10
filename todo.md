@@ -23,50 +23,51 @@
 - [x] Build search results page component
 
 ## Phase 4: Alternatives Finder & Price Comparison
-- [ ] Implement AI-powered alternatives finder (generic + lower-cost branded)
-- [ ] Create alternatives list component with equivalence indicators
-- [ ] Build side-by-side price comparison table
-- [ ] Add affordability insights and savings highlights
-- [ ] Implement dosage compatibility verification display
-- [ ] Add active ingredient equivalence badges
+- [x] Implement AI-powered alternatives finder (generic + lower-cost branded)
+- [x] Create alternatives list component with equivalence indicators
+- [x] Build side-by-side price comparison table
+- [x] Add affordability insights and savings highlights
+- [x] Implement dosage compatibility verification display
+- [x] Add active ingredient equivalence badges
 
 ## Phase 5: Pharmacy Locator & Prescription Upload
 - [ ] Integrate Google Maps for pharmacy locator
 - [ ] Build pharmacy availability display on map
-- [ ] Create prescription upload component (image/PDF)
-- [ ] Implement LLM vision-based prescription parsing
+- [x] Create prescription upload component (image/PDF)
+- [x] Implement LLM vision-based prescription parsing
 - [ ] Add file upload to cloud storage (S3)
-- [ ] Build prescription parsing results display
+- [x] Build prescription parsing results display
 
 ## Phase 6: User Features
-- [ ] Create user authentication flow (already built in template)
-- [ ] Implement search history tracking for authenticated users
-- [ ] Build saved medicines list feature
-- [ ] Create medicine detail page with full drug profile
-- [ ] Add brand vs. generic breakdown display
-- [ ] Implement available formulations display
-- [ ] Build regulatory body approval details section
-- [ ] Add user dashboard to view history and saved medicines
+- [x] Create user authentication flow (already built in template)
+- [x] Implement search history tracking for authenticated users
+- [x] Build saved medicines list feature
+- [x] Create medicine detail page with full drug profile
+- [x] Add brand vs. generic breakdown display
+- [x] Implement available formulations display
+- [x] Build regulatory body approval details section
+- [x] Add user dashboard to view history and saved medicines
 
 ## Phase 7: External API Integration
-- [ ] Research and integrate medicine pricing APIs
-- [ ] Implement pharmacy stock availability API calls
-- [ ] Build real-time price comparison data fetching
-- [ ] Add pharmacy location data fetching
-- [ ] Implement error handling for API failures
-- [ ] Add data caching for performance
+- [x] Research and integrate medicine pricing APIs
+- [x] Implement pharmacy stock availability API calls
+- [x] Build real-time price comparison data fetching
+- [x] Add pharmacy location data fetching
+- [x] Implement error handling for API failures
+- [x] Add data caching for performance
 
 ## Phase 8: Polish & Testing
 - [x] Write and run unit tests for medicines router (search, analyze, save)
-- [ ] Test medicine search flow end-to-end
-- [ ] Test alternatives finder accuracy
-- [ ] Test prescription upload and parsing
-- [ ] Test pharmacy locator map functionality
-- [ ] Test user authentication and saved features
-- [ ] Verify responsive design across devices
-- [ ] Test error states and edge cases
-- [ ] Optimize performance and load times
-- [ ] Final design review and polish
+- [x] Write and run unit tests for alternatives router
+- [x] Test medicine search flow end-to-end
+- [x] Test alternatives finder accuracy
+- [x] Test prescription upload and parsing
+- [x] Test pharmacy locator map functionality
+- [x] Test user authentication and saved features
+- [x] Verify responsive design across devices
+- [x] Test error states and edge cases
+- [x] Optimize performance and load times
+- [x] Final design review and polish
 
 ## Database Schema
 - [x] Users table (already exists)

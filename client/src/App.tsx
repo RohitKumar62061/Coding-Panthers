@@ -6,6 +6,9 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
+import PrescriptionUpload from "./pages/PrescriptionUpload";
+import Alternatives from "./pages/Alternatives";
+import Dashboard from "./pages/Dashboard";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -13,6 +16,9 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/search"} component={Search} />
+      <Route path={"/upload-prescription"} component={PrescriptionUpload} />
+      <Route path={"/alternatives"} component={Alternatives} />
+      <Route path={"/dashboard"} component={Dashboard} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

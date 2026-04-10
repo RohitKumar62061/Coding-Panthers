@@ -49,12 +49,16 @@ export default function Home() {
               How It Works
             </a>
             {isAuthenticated ? (
-              <>
-                <span className="text-sm text-muted-foreground">{user?.name}</span>
-                <Button onClick={() => navigate("/dashboard")} variant="default" size="sm">
+              <div className="flex items-center gap-4">
+                <Button
+                  variant="ghost"
+                  onClick={() => navigate("/dashboard")}
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   Dashboard
                 </Button>
-              </>
+                <span className="text-sm text-muted-foreground">{user?.name}</span>
+              </div>
             ) : (
               <Button onClick={() => (window.location.href = getLoginUrl())} variant="default" size="sm">
                 Sign In
@@ -129,6 +133,16 @@ export default function Home() {
                 Start Medicine Search
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
+              {isAuthenticated && (
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => navigate("/upload-prescription")}
+                  className="px-8 py-6 text-lg"
+                >
+                  Upload Prescription
+                </Button>
+              )}
               <Button
                 variant="outline"
                 size="lg"
