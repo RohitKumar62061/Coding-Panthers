@@ -1,6 +1,15 @@
-import { eq } from "drizzle-orm";
+import { eq, like } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import {
+  InsertUser,
+  users,
+  medicines,
+  alternatives,
+  prices,
+  savedMedicines,
+  searchHistory,
+  prescriptions,
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +98,141 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Medicine query helpers
+export async function getMedicineByName(name: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const result = await db
+    .select()
+    .from(medicines)
+    .where(like(medicines.name, `%${name}%`))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function searchMedicines(query: string, limit = 10) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const results = await db
+    .select()
+    .from(medicines)
+    .where(like(medicines.name, `%${query}%`))
+    .limit(limit);
+
+  return results;
+}
+
+export async function getAlternativesForMedicine(medicineId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const results = await db
+    .select()
+    .from(alternatives)
+    .where(eq(alternatives.originalMedicineId, medicineId));
+
+  return results;
+}
+
+export async function saveMedicineForUser(
+  userId: number,
+  medicineId: number,
+  notes?: string
+) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    await db.insert(savedMedicines).values({
+      userId,
+      medicineId,
+      notes,
+    });
+    return true;
+  } catch (error) {
+    console.error("Failed to save medicine:", error);
+    return false;
+  }
+}
+
+export async function getUserSavedMedicines(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const results = await db
+    .select()
+    .from(savedMedicines)
+    .where(eq(savedMedicines.userId, userId));
+
+  return results;
+}
+
+export async function addToSearchHistory(
+  userId: number,
+  query: string,
+  medicineId?: number
+) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    await db.insert(searchHistory).values({
+      userId,
+      searchQuery: query,
+      medicineId,
+    });
+    return true;
+  } catch (error) {
+    console.error("Failed to add to search history:", error);
+    return false;
+  }
+}
+
+export async function getUserSearchHistory(userId: number, limit = 20) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const results = await db
+    .select()
+    .from(searchHistory)
+    .where(eq(searchHistory.userId, userId))
+    .limit(limit);
+
+  return results;
+}
+
+export async function savePrescription(
+  userId: number,
+  fileUrl: string,
+  extractedMedicines?: string
+) {
+  const db = await getDb();
+  if (!db) return null;
+
+  try {
+    const result = await db.insert(prescriptions).values({
+      userId,
+      fileUrl,
+      extractedMedicines,
+    });
+    return result;
+  } catch (error) {
+    console.error("Failed to save prescription:", error);
+    return null;
+  }
+}
+
+export async function getPricesForMedicine(medicineId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const results = await db
+    .select()
+    .from(prices)
+    .where(eq(prices.medicineId, medicineId));
+
+  return results;
+}
